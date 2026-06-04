@@ -1,7 +1,5 @@
 #![allow(unused)]
 #![allow(dead_code)]
-//! Naive runtime state machine — order lifecycle.
-//! Events drive transitions, but correctness is on you.
 
 #[derive(Debug)]
 enum OrderState {
@@ -41,7 +39,6 @@ impl Order {
             (OrderState::Confirmed, OrderEvent::Cancel) => OrderState::Cancelled,
             (OrderState::Shipped, OrderEvent::Deliver) => OrderState::Delivered,
 
-            // Everything else is invalid — but this is runtime, not compile time
             (state, event) => {
                 return Err(format!("Invalid event {:?} for state {:?}", event, state));
             }
@@ -52,16 +49,8 @@ impl Order {
     }
 }
 
-// -------------------------- example -------------------------- //
-
 fn example() {
     let mut new_order = Order::new(67);
-
     new_order.handle(OrderEvent::Confirm);
-    // This hides the error, or we need to handle it here and now.
-    // This gives runtime error
-    // This pattern also makes us developers need to remember what we can do in each cases
-    // for every time we need to use the state. The struct pattern only makes us remember and
-    // implement the rules once.
     new_order.handle(OrderEvent::Deliver);
 }
