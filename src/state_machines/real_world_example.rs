@@ -1,3 +1,5 @@
+#![allow(unused)]
+#![allow(dead_code)]
 use std::{
     collections::HashMap,
     sync::{Arc, RwLock},
@@ -75,18 +77,30 @@ enum ProvisionWrapper {
 }
 
 impl CacheEntry for Provision<Reservation> {
-    fn user_id(&self) -> u128 { self.user_id }
-    fn into_wrapper(self) -> ProvisionWrapper { ProvisionWrapper::Reservation { provision: self } }
+    fn user_id(&self) -> u128 {
+        self.user_id
+    }
+    fn into_wrapper(self) -> ProvisionWrapper {
+        ProvisionWrapper::Reservation { provision: self }
+    }
 }
 
 impl CacheEntry for Provision<KafkaReady> {
-    fn user_id(&self) -> u128 { self.user_id }
-    fn into_wrapper(self) -> ProvisionWrapper { ProvisionWrapper::KafkaReady { provision: self } }
+    fn user_id(&self) -> u128 {
+        self.user_id
+    }
+    fn into_wrapper(self) -> ProvisionWrapper {
+        ProvisionWrapper::KafkaReady { provision: self }
+    }
 }
 
 impl CacheEntry for Provision<RestReady> {
-    fn user_id(&self) -> u128 { self.user_id }
-    fn into_wrapper(self) -> ProvisionWrapper { ProvisionWrapper::RestReady { provision: self } }
+    fn user_id(&self) -> u128 {
+        self.user_id
+    }
+    fn into_wrapper(self) -> ProvisionWrapper {
+        ProvisionWrapper::RestReady { provision: self }
+    }
 }
 
 struct ProvisionCache {
@@ -102,7 +116,10 @@ impl ProvisionCache {
 
     pub fn insert<S: CacheEntry>(&self, provision: S) {
         let user_id = provision.user_id();
-        self.cache.write().unwrap().insert(user_id, provision.into_wrapper());
+        self.cache
+            .write()
+            .unwrap()
+            .insert(user_id, provision.into_wrapper());
     }
 
     pub fn take(&self, user_id: u128) -> Option<ProvisionWrapper> {
